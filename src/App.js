@@ -7,7 +7,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       searchAttribute: true,
-      elementName: "meta:ContentType"
+      elementName: "BookInfo",
+      attributeName: "BookProductType",
+      attributeValueName: "dictionary"
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -15,7 +17,7 @@ class App extends React.Component {
 
   handleInputChange(event) {
     const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const value = target.type === 'radio' ? target.checked : target.value;
     const name = target.name;
 
     this.setState({
@@ -61,18 +63,44 @@ class App extends React.Component {
           value={this.state.elementName}
           onChange={this.handleInputChange} />
       </label>
+      <label>
+          Element Value:
+          <input
+            name="element-value-selector"
+            type="radio"
+            checked={this.state.searchElementValue}
+            onChange={this.handleInputChange} />
+            <input
+              name="element-value-name"
+              type="text"
+              value={this.state.elementValueName}
+              onChange={this.handleInputChange} />
+        </label>
 
         <label>
           Attribute:
           <input
             name="attribute-selector"
-            type="checkbox"
+            type="radio"
             checked={this.state.searchAttribute}
             onChange={this.handleInputChange} />
             <input
               name="attribute-name"
               type="text"
               value={this.state.attributeName}
+              onChange={this.handleInputChange} />
+        </label>
+        <label>
+          Attribute Value:
+          <input
+            name="attribute-value-selector"
+            type="radio"
+            checked={this.state.searchAttributeValue}
+            onChange={this.handleInputChange} />
+            <input
+              name="attribute-value-name"
+              type="text"
+              value={this.state.attributeValueName}
               onChange={this.handleInputChange} />
         </label>
 </p>
