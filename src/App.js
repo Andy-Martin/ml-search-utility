@@ -1,140 +1,219 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import ReactDOM from 'react-dom';
 import './App.css';
+import ElementSuggestions from './autosuggest.js'
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchAttribute: true,
-      elementName: "BookInfo",
-      attributeName: "BookProductType",
-      attributeValueName: "dictionary"
-    };
-
-    this.handleInputChange = this.handleInputChange.bind(this);
+function ElementValueBox(props) {
+  if (!props.elementValue) {
+    return null;
   }
 
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === 'radio' ? target.checked : target.value;
-    const name = target.name;
+  return (
+    <div className="elementValueInput">
+      <label>
+          Element Value:
+            <input
+              name="element-value-name"
+              type="text"
+               />
+        </label>
+    </div>
+  );
+}
 
-    this.setState({
-      [name]: value
-    });
+function AttributeNameBox(props) {
+  if (!props.attributeName) {
+    return null;
   }
 
-  render() {
-    return (
+  return (
+    <div className="attributeNameInput">
+      <label>
+          Attribute:
+            <input
+              name="attribute-name"
+              type="text"
+               />
+        </label>
+       
+    </div>
+  );
+}
 
-      <div className="App">
-        <header className="App-header">
+function AttributeValueBox(props) {
+  if (!props.attributeValue) {
+    return null;
+  }
 
-          <h1 className="App-title">ML-Search-Utility</h1>
-        </header>
-        <p className="xmlExample">
-        <h2> Example xml</h2>
-          This is a how our xml looks with the names of the <i>things</i> written in their place:
-           </p>
-          <p>
-                    <code>&lt;Element Attribute="Attribute Value"&gt;Element Value&lt;Element&gt; </code>
-    </p>
-    <div className="Search">
-    <h2>Search</h2>
+  return (
+    <div className="AttributeValueInput">
+      <label>
+          Attribute Value:
+            <input
+              name="Attribute-value-name"
+              type="text"
+               />
+        </label>
+    </div>
+  );
+}
 
+function SiteSelector(props) {
 
-      <form>
-      <p className="Site-Selector">
+  return (
+    <div className="siteSelector">
       <select>
         <option value="All-Sites">All Sites</option>
         <option selected value="SpringerLink">SpringerLink</option>
         <option value="BMC">BioMed Central</option>
         <option value="BSL">BSL</option>
         <option value="sprcom">Springer.com</option>
-      </select> <br />
-</p>
-<p className="Search-Statement">
-      <label>
-        Element:
-        <input
-          name="element"
-          type="text"
-          value={this.state.elementName}
-          onChange={this.handleInputChange} />
-      </label>
-      <label>
-          Element Value:
-          <input
-            name="element-value-selector"
-            type="radio"
-            checked={this.state.searchElementValue}
-            onChange={this.handleInputChange} />
-            <input
-              name="element-value-name"
-              type="text"
-              value={this.state.elementValueName}
-              onChange={this.handleInputChange} />
-        </label>
+      </select> 
+</div>
+    );
+}
 
-        <label>
-          Attribute:
-          <input
-            name="attribute-selector"
-            type="radio"
-            checked={this.state.searchAttribute}
-            onChange={this.handleInputChange} />
-            <input
-              name="attribute-name"
-              type="text"
-              value={this.state.attributeName}
-              onChange={this.handleInputChange} />
-        </label>
-        <label>
-          Attribute Value:
-          <input
-            name="attribute-value-selector"
-            type="radio"
-            checked={this.state.searchAttributeValue}
-            onChange={this.handleInputChange} />
-            <input
-              name="attribute-value-name"
-              type="text"
-              value={this.state.attributeValueName}
-              onChange={this.handleInputChange} />
-        </label>
-</p>
-<h2>Return</h2>
+
+class Page extends React.Component {
+  constructor(props) {
+    super(props);
+    
+// These are the default states of our things
+    this.state = {
+      showElementValue: false,
+      showAttribute: false,
+      showAttributeValue: false,
+      selectedOption: 'count'
+    };
+  // These bind changes to things
+    this.handleToggleElementValue = this.handleToggleElementValue.bind(this);
+    this.handleToggleAttributeName = this.handleToggleAttributeName.bind(this);
+    this.handleToggleAttributeValue = this.handleToggleAttributeValue.bind(this);
+    this.handleReturnValue = this.handleReturnValue.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  }
+
+
+// These are our event handlers
+
+  handleToggleElementValue() {
+    this.setState(prevState => ({
+      showElementValue: !prevState.showElementValue
+    }));
+  }
+
+   handleToggleAttributeName() {
+    this.setState(prevState => ({
+      showAttribute: !prevState.showAttribute
+    }));
+  }
+
+  handleToggleAttributeValue() {
+    this.setState(prevState => ({
+      showAttributeValue: !prevState.showAttributeValue
+    }));
+  }
+
+  handleReturnValue(changeEvent) {
+    this.setState({
+      selectedOption: changeEvent.target.value
+    });
+  }
+
+  handleFormSubmit(formSubmitEvent) {
+    formSubmitEvent.preventDefault();
+    alert(`You chose the ${this.state.selectedOption} return value`);
+  }
+
+
+
+  render() {
+    return (
+<div>
+      <header className="App-header">
+
+          <h1 className="App-title">ML-Search-Utility</h1>
+        </header>
+       
+        <h2> Example xml</h2>
+          This is a how our xml looks with the names of the <i>things</i> written in their place:
+     
+    <p>
+     <code>&lt;Element Attribute="Attribute Value"&gt;Element Value&lt;Element&gt; </code>
+    </p>
+        <h2> Search</h2>
+        <p> Which platforms do you wish to search?</p>
+        <form>
+        <SiteSelector />
+        
+        <p> Create your search statement(s) </p>
+
 <label>
+        Element:
+        <ElementSuggestions />
+      </label>
+    
 
-<input
-        name="count"
-        type="radio"
-        />Count  <br />
-<input
-        name="doi"
-        type="radio"
-        />DOI(s)  <br />
-<input
-        name="xml"
-        type="radio"
-        />Full XML  <br />
-<input
-        name="nodes"
-        type="radio"
-        />Specific Nodes <input
-                              name="node-paths"
-                              type="text"
-                              />
-        <br />
-</label>
-<input type="Submit" value="Search"/>
-      </form>
 
-      </div>
-      </div>
+        <button onClick={this.handleToggleElementValue}>
+          {this.state.showElementValue ? 'Remove Element Value' : 'Add Element Value'}
+        </button>
+        <ElementValueBox elementValue={this.state.showElementValue} />
+      
+      <button onClick={this.handleToggleAttributeName}>
+        {this.state.showAttribute ? 'Remove Attribute' : 'Add Attribute'}
+        </button>
+        <AttributeNameBox attributeName={this.state.showAttribute} />
+ 
+      <button onClick={this.handleToggleAttributeValue}>
+        {this.state.showAttributeValue ? 'Remove Attribute Value' : 'Add Attribute Value'}
+        </button>
+        <AttributeValueBox attributeValue={this.state.showAttributeValue} />
+      
+    
+
+{
+  // none of this works yet
+}
+              <h2>Return</h2>
+                 <div className="radio">
+      <label>
+        <input type="radio" value="count" 
+                      checked={this.state.selectedOption === "count"} 
+                      onChange={this.handleReturnValue} />
+        Count
+      </label>
+    </div>
+    <div className="radio">
+      <label>
+        <input type="radio" value="doi" 
+                      checked={this.state.selectedOption === "doi"} 
+                      onChange={this.handleReturnValue} />
+        DOI
+      </label>
+    </div>
+    <div className="radio">
+      <label>
+        <input type="radio" value="xml" 
+                      checked={this.state.selectedOption === "xml"} 
+                      onChange={this.handleReturnValue} />
+        XML
+      </label>
+    </div>
+        <div className="radio">
+      <label>
+        <input type="radio" value="nodes" 
+                      checked={this.state.selectedOption === "nodes"} 
+                      onChange={this.handleReturnValue} />
+        Specific Node(s)
+      </label>
+    </div>
+    <button className="btn btn-default" type="submit" onClick={this.handleFormSubmit} >Submit</button>
+</form>
+
+</div>
     );
   }
 }
 
-export default App;
+export default Page;
