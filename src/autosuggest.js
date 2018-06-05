@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
 import * as listOfElements from './elementsToSuggest';
+
  
 // Imagine you have a list of suggestions that you'd like to autosuggest.
 const suggestions = listOfElements.ELEMENT_NAMES;
